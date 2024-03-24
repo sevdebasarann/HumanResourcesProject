@@ -1,0 +1,32 @@
+﻿@model ExcelDateVM
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Export Cash Advances to Excel</h4>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form method="post">
+                        <div class="card-body">
+                            <p class="card-description">In which date range would you like to see the cash advances made?</p>
+                            <div class="input-group input-daterange d-flex align-items-center">
+
+                                <input asp-for="Start" type="date" class="form-control">
+
+                                <div class="input-group-addon mx-4">to</div>
+
+                                <input asp-for="End" type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group mx-4">
+                            <div class="btn-group" role="group" aria-label="Export Options">
+                                <button type="submit" class="btn btn-outline-primary" asp-controller="CashAdvance" asp-action="CashAdvanceExcel" formtarget="_blank">Export to Excel</button>
+                                <button type="submit" class="btn btn-outline-primary" asp-controller="CashAdvance" asp-action="CashAdvancePDF" formtarget="_blank">Export to PDF</button>
+                                <a asp-controller="CashAdvance" asp-action="Index" class="btn btn-outline-info">Back to List</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

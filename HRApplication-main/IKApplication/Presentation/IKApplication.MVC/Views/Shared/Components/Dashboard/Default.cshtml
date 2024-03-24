@@ -1,0 +1,120 @@
+﻿@model DashboardVM
+
+
+<div class="row mb-4">
+    @*Company and company managers count cards*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
+            <div class="card-body">
+                <h4 class="card-title">Total Company Count</h4>
+                <p class="card-description"><h5>@Model.TotalCompanyCount</h5></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Company Manager Count</h4>
+                <p class="card-description"><h5>@Model.TotalCompanyManagerCount</h5></p>
+            </div>
+        </div>
+    </div>
+
+    @*Active and passive companies count cards*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
+            <div class="card-body">
+                <h4 class="card-title">Total Active Company Count</h4>
+                <p class="card-description"><h5>@Model.ActiveCompanies</h5></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
+            <div class="card-body">
+                <h4 class="card-title">Total Passive Company Count</h4>
+                <p class="card-description"><h5>@Model.PassiveCompanies</h5></p>
+            </div>
+        </div>
+    </div>
+
+    @*Active and passive users count cards*@
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
+            <div class="card-body">
+                <h4 class="card-title">Total Active Users Count</h4>
+                <p class="card-description"><h5>@Model.ActiveUsers</h5></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card" style="height: 100%;">
+            <div class="card-body">
+                <h4 class="card-title">Total Passive Users Count</h4>
+                <p class="card-description"><h5>@Model.PassiveUsers</h5></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<br />
+
+@*Company counts by Sector*@
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card" style="height: 100%;">
+            <div class="card-body">
+                <h4 class="card-title">Company Counts By Sector</h4>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/vendors/chart.js/Chart.min.js"></script>
+
+<script>
+    labels = [];
+    data = [];
+    backgroundColor = ["#ff0000","#ff8000","#ffff00","#80ff00","#00ff00","#00ff80","#00ffff","#0080ff","#0000ff","#8000ff"];
+    @for (var i = 0; i < 10; i++) {
+        <text>labels[@i] = "@Html.Raw(Model.Sectors[i].Name)";</text>
+        <text>data[@i] ="@Html.Raw(Model.Sectors[i].CompanyCount)";</text>
+    }
+
+    var areaData = {
+        labels,
+        datasets: [{
+            data,
+            backgroundColor
+        }
+        ]
+    };
+    var areaOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        segmentShowStroke: false,
+        cutoutPercentage: 70,
+        elements: {
+            arc: {
+                borderWidth: 0
+            }
+        },
+        legend: {
+            display: false
+        },
+        tooltips: {
+            enabled: true
+        }
+    }
+    var transactionhistoryChartCanvas = document.getElementById('myChart');
+    var transactionhistoryChart = new Chart(transactionhistoryChartCanvas, {
+        type: 'doughnut',
+        data: areaData,
+        options: areaOptions
+    });
+</script>

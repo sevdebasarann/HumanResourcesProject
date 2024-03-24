@@ -1,0 +1,63 @@
+﻿@model List<LeaveVM>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Leave Requests</h4>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form>
+                        @if (Model == null || Model.Count == 0)
+                        {
+                            <p class="text-center mt-4" style="font-style: italic;">Has no data</p>
+                        }
+                        else
+                        {
+                            <table id="order-listing" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Personal</th>
+                                        <th>Approved By</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Explanation</th>
+                                        <th>Total Leave days</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.PersonalFullName</td>
+                                            <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>
+                                            <td>@item.StartDate.ToShortDateString()</td>
+                                            <td>@item.EndDate.ToShortDateString()</td>
+                                            <td>@item.Explanation</td>
+                                            <td>@item.TotalLeaveDays</td>
+                                            @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                            {
+                                                <td>
+                                                    Approved
+                                                </td>
+                                            }
+                                            @if (@item.Status == Status.Passive)
+                                            {
+                                                <td>
+                                                    In Pending
+                                                </td>
+                                            }
+                                            <td>
+                                                <button class="btn btn-outline-primary" asp-controller="Leave" asp-action="LeaveRequestDetails" asp-route-id="@item.Id">Details</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

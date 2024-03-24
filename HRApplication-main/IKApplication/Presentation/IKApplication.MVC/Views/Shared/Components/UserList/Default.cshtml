@@ -1,0 +1,153 @@
+﻿@model List<AppUserVM>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@ViewBag.Header</h4>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div id="order-listing_filter" class="dataTables_filter">
+                                    <label>
+                                        <input type="search" id="searchBar" class="form-control" placeholder="Search" aria-controls="order-listing">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="userList" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Title</th>
+                                            <th>Company Name</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.Area != "Site Administrator")
+                                        {
+                                            <div class="d-flex justify-content-center mb-2">
+                                                <div class="col-md-3 m-3">
+                                                    <a asp-controller="User" asp-action="CreateCompanyManagerAndPersonal">
+                                                        <button class="btn btn-outline-primary">New USER</button>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-3 m-3">
+                                                    <a asp-controller="User" asp-action="StaffCards">
+                                                        <button class="btn btn-outline-primary">Go to Staff Summary</button>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.FullName</td>
+                                                <td>@item.Email</td>
+                                                <td>@item.Title.Name</td>
+                                                <td>@item.CompanyName</td>
+
+                                                @if (item.Status == Status.Active || item.Status == Status.Modified)
+                                                {
+                                                    <td>Active</td>
+                                                }
+
+                                                @if (item.Status == Status.Passive)
+                                                {
+                                                    <td>In Pending</td>
+                                                }
+
+                                                <td>
+                                                    <a asp-action="Update" asp-route-id="@item.Id">
+                                                        <button class="btn btn-outline-primary">Update</button>
+                                                    </a>
+                                                    <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.Id">Delete</button>
+                                                </td>
+                                            </tr>
+
+                                            <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5">Delete a Personal</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to delete @item.FullName?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cancel</button>
+                                                            <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">
+                                                                <button type="button" class="btn btn-outline-danger">Delete</button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row col-12 m-4">
+        <div class="col-2">
+            <a asp-controller="User" asp-action="UserExcel" class="m-4" target="_blank">
+                <button class="btn btn-outline-primary">Export to Excel</button>
+            </a>
+        </div>
+        <div class="col-2">
+            <a asp-controller="User" asp-action="UserPDF" class="m-4" target="_blank">
+                <button class="btn btn-outline-primary">Export to PDF</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+    var searchInput = document.getElementById('searchBar');
+    var table = document.getElementById('userList');
+    var tableRows = table.getElementsByTagName('tr');
+
+    searchInput.addEventListener('keyup', function (event) {
+        var searchText = event.target.value.toLowerCase();
+
+        for (var i = 1; i < tableRows.length; i++) {
+            var row = tableRows[i];
+            var rowData = row.getElementsByTagName('td');
+            var match = false;
+
+            for (var j = 0; j < rowData.length; j++) {
+                var cellData = rowData[j].innerText.toLowerCase();
+                if (cellData.indexOf(searchText) > -1) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+</script>

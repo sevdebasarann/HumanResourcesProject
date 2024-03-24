@@ -1,0 +1,94 @@
+﻿@*
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    PERSONEL
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*@
+
+@model List<ExpenseVM>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Expense List</h4>
+        <a asp-controller="Expense" asp-action="Create">
+            <button class="btn btn-outline-primary">Add Expense</button>
+        </a>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <form>
+                        @if (Model == null || Model.Count == 0)
+                        {
+                            <p class="text-center mt-4" style="font-style: italic;">Has no data</p>
+                        }
+                        else
+                        {
+                            <table id="order-listing" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Short Description</th>
+                                        <th>Amount</th>
+                                        <th>Currency</th>
+                                        <th>Expense Type</th>
+                                        <th>Expense Date</th>
+                                        <th>Approved By</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.ShortDescription</td>
+                                            <td>@item.Amount</td>
+                                            @if (item.Currency == Currency.TL)
+                                            {
+                                                <td>&#x20BA;</td>
+                                            }
+                                            @if (item.Currency == Currency.USD)
+                                            {
+                                                <td>&#x24;</td>
+                                            }
+                                            @if (item.Currency == Currency.EUR)
+                                            {
+                                                <td>&#x20AC;</td>
+                                            }
+                                            <td>@item.Type</td>
+                                            <td>@item.ExpenseDate.ToShortDateString()</td>
+                                            <td>@item.ApprovedBy.Name @item.ApprovedBy.SecondName @item.ApprovedBy.Surname</td>
+                                            @if (@item.Status == Status.Active || item.Status == Status.Modified)
+                                            {
+                                                <td>
+                                                    Approved
+                                                </td>
+                                            }
+                                            @if (@item.Status == Status.Passive)
+                                            {
+                                                <td>
+                                                    In Pending
+                                                </td>
+                                            }
+                                            <td>
+                                                @if (item.Status == Status.Passive)
+                                                {
+                                                    <button class="btn btn-outline-primary" asp-controller="Expense" asp-action="Update" asp-route-id="@item.Id">Update</button>
+                                                    <button class="btn btn-outline-danger" asp-controller="Expense" asp-action="Delete" asp-route-id="@item.Id">Delete</button>
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-outline-primary disabled" disabled>Update</button>
+                                                    <button class="btn btn-outline-danger disabled" disabled>Delete</button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
